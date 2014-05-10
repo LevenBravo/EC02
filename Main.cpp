@@ -33,22 +33,22 @@ static struct MainGlobals {
 // Static Function Declarations
 //==============================================================================================================
 static void Help
-    (
-    );
+(
+);
 
 static void Parallel
-    (
-    );
+(
+);
 
 static void ParseCmdLine
-    (
-    int   pArgc,
-    char *pArgv[]
-    );
+(
+ int   pArgc,
+ char *pArgv[]
+ );
 
 static void Serial
-    (
-    );
+(
+);
 
 //==============================================================================================================
 // Public Function Declarations
@@ -61,9 +61,9 @@ static void Serial
 // exit(). Note that if exit() is called, any running threads will be terminated.
 //--------------------------------------------------------------------------------------------------------------
 void Error
-    (
-    std::string const pMsg
-    )
+(
+ std::string const pMsg
+ )
 {
     if (pMsg != "") cout << pMsg << endl;
     exit(-1);
@@ -76,10 +76,10 @@ void Error
 // mode. Calls pthread_exit() to wait on all threads to terminate before main() terminates.
 //--------------------------------------------------------------------------------------------------------------
 int main
-    (
-    int   pArgc,
-    char *pArgv[]
-    )
+(
+ int   pArgc,
+ char *pArgv[]
+ )
 {
     ParseCmdLine(pArgc, pArgv);
     gGlobals.mRunMode == serial ? Serial() : Parallel();
@@ -92,8 +92,8 @@ int main
 // Returns the mVerbose flag from the gGlobals structure.
 //--------------------------------------------------------------------------------------------------------------
 bool GetVerbose
-    (
-    )
+(
+)
 {
     return gGlobals.mVerbose;
 }
@@ -104,8 +104,8 @@ bool GetVerbose
 // Displays information about the command line arguments and options.
 //--------------------------------------------------------------------------------------------------------------
 static void Help
-    (
-    )
+(
+)
 {
     cout << "usage: thread mode prime-limit amicable-limit keith-limit [--verbose]" << endl << endl;
     cout << "mode is:" << endl << endl;
@@ -125,17 +125,18 @@ static void Help
 // thread fails to start, the we terminate by calling Error().
 //--------------------------------------------------------------------------------------------------------------
 static void Parallel
-    (
-    )
+(
+)
 {
     ThreadState *primesState = StartThread(FindPrimesThread, gGlobals.mPrimeLimit);
-    if (primesState->mStarted != 0) Error("Failed to start FindPrimes thread");
-
+    if (primesState->mStarted != 0) Error("Failed to start FindPrimes thread...you suck at life");
+    
     ThreadState *amicableState = StartThread(FindAmicableThread, gGlobals.mAmicableLimit);
-    if (amicableState->mStarted != 0) Error("Failed to start FindAmicable thread");
-
+    if (amicableState->mStarted != 0) Error("Failed to start FindAmicable thread...you suck at life");
+    
     // Start the thread to find the Keith numbers.
-    ???
+    ThreadState *keithState = StartThread(FindKeithsThread,gGlobals.mKeithLimit);
+    if(keithState->mStarted !=0) Error("Failed to start FindKeith thread...you suck at life");
 }
 
 //--------------------------------------------------------------------------------------------------------------
@@ -144,10 +145,10 @@ static void Parallel
 // See Help() for what is expected on the command line.
 //--------------------------------------------------------------------------------------------------------------
 static void ParseCmdLine
-    (
-    int         pArgc,
-    char       *pArgv[]
-    )
+(
+ int         pArgc,
+ char       *pArgv[]
+ )
 {
     gGlobals.mVerbose = false;
     if (pArgc < 6) { Help(); Error(""); }
@@ -156,8 +157,8 @@ static void ParseCmdLine
     else if (mode == "--parallel") gGlobals.mRunMode = parallel;
     else { Help(); Error(""); }
     gGlobals.mPrimeLimit = atol(pArgv[2]);
-    gGlobals.mAmicableLimit = atol(pArgv[3]);   
-    gGlobals.mKeithLimit = atol(pArgv[4]);  
+    gGlobals.mAmicableLimit = atol(pArgv[3]);
+    gGlobals.mKeithLimit = atol(pArgv[4]);
     if (pArgc == 6) {
         string verbose(pArgv[5]);
         if (verbose == "--verbose") gGlobals.mVerbose = true;
@@ -175,4 +176,9 @@ static void ParseCmdLine
 // Call FindAmicable()
 // Call FindKeiths()
 //--------------------------------------------------------------------------------------------------------------
-???
+static void Serial()
+{
+    FindPrimes(gGlobals.mPrimeLimit);
+    FindAmicable(gGlobals.mAmicableLimit);
+    FindKeiths(gGlobals.mKeithLimit);
+}
