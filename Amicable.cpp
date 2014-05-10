@@ -1,4 +1,8 @@
 //**************************************************************************************************************
+//**************************************************************************************************************
+//CSE 220 EC
+//Charles Crow (LevenBravo)
+//Mike Mayr (MMayr15)
 // FILE: Amicable.cpp
 //**************************************************************************************************************
 #include <iostream>
@@ -14,15 +18,15 @@ using std::endl;
 // Static Function Declarations
 //==============================================================================================================
 static bool AreAmicable
-    (
-    ulong const pNum1,
-    ulong const pNum2
-    );
+(
+ ulong const pNum1,
+ ulong const pNum2
+ );
 
 static ulong SumProperDivisors
-    (
-    ulong const pNum
-    );
+(
+ ulong const pNum
+ );
 
 //==============================================================================================================
 // Function Definitions
@@ -34,10 +38,10 @@ static ulong SumProperDivisors
 // Returns true if pNum1 and pNum2 are amicable numbers.
 //--------------------------------------------------------------------------------------------------------------
 static bool AreAmicable
-    (
-    ulong const pNum1,
-    ulong const pNum2
-    )
+(
+ ulong const pNum1,
+ ulong const pNum2
+ )
 {
     return SumProperDivisors(pNum1) == pNum2 && SumProperDivisors(pNum2) == pNum1;
 }
@@ -48,9 +52,9 @@ static bool AreAmicable
 // Finds all amicable numbers from 2 to pLimit. We do nothing with the numbers that we find.
 //--------------------------------------------------------------------------------------------------------------
 void FindAmicable
-    (
-    ulong pLimit
-    )
+(
+ ulong pLimit
+ )
 {
     if (GetVerbose()) cout << "FindAmicable() Begin" << endl;
     for (ulong num1 = 2L; num1 <= pLimit; num1++) {
@@ -70,9 +74,9 @@ void FindAmicable
 // NOTE: See comments in FindPrimesThread().
 //--------------------------------------------------------------------------------------------------------------
 void *FindAmicableThread
-    (
-    void *pState
-    )
+(
+ void *pState
+ )
 {
     if (GetVerbose()) cout << "FindAmicableThread() Begin" << endl;
     ThreadState *state = static_cast<ThreadState *>(pState);
@@ -88,9 +92,9 @@ void *FindAmicableThread
 // Returns the sum of the proper divisors of pNum.
 //--------------------------------------------------------------------------------------------------------------
 static ulong SumProperDivisors
-    (
-    ulong const pNum
-    )
+(
+ ulong const pNum
+ )
 {
     ulong sum = 1L;
     for (ulong div = 2L; div < pNum; div++) {
@@ -98,3 +102,4 @@ static ulong SumProperDivisors
     }
     return sum;
 }
+
